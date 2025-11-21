@@ -1,0 +1,15 @@
+@forward 'base/variables';
+@forward 'base/mixins';
+@forward 'base/globales';
+@forward 'base/utilidades';
+@forward 'base/botones';
+
+/* UI */
+
+@forward 'layout/header';
+@forward 'layout/footer';
+@forward 'layout/navegacion';
+@forward 'layout/iconos';
+@forward 'layout/anuncios';
+@forward 'layout/contactar';
+@forward 'layout/inferior';
