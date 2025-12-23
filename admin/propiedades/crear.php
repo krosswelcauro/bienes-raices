@@ -1,4 +1,34 @@
 <?php 
+    // Base de datos
+    require '../../includes/config/database.php';
+    $db = conectarDB();
+
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        echo "<pre>";
+        var_dump($_POST);
+        echo "</pre>";
+
+        $titulo = $_POST['titulo'];
+        $precio = $_POST['precio'];
+        $descripcion = $_POST['descripcion'];
+        $habitaciones = $_POST['habitaciones'];
+        $wc = $_POST['wc'];
+        $estacionamiento = $_POST['estacionamiento'];
+        $vendedores_id = $_POST['vendedor'];
+
+        // Insertar en la base de datos
+        $query = "INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, vendedores_id) VALUES ( '$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$vendedores_id' );";
+
+        // echo $query;
+
+        $resultado = mysqli_query($db, $query);
+
+        if ($resultado) {
+            echo "Insertado correctamente";
+        }
+
+    }
+
     require '../../includes/funciones.php';
     incluirTemplate('header');
 ?>
@@ -8,7 +38,7 @@
 
         <a href="/admin" class="boton boton-verde">Volver</a>
 
-        <form action="" class="formulario">
+        <form action="/admin/propiedades/crear.php" method="POST" class="formulario">
             <fieldset>
                 <legend>Información General</legend>
 
@@ -19,7 +49,7 @@
                 <input type="number" name="precio" id="precio" placeholder="Precio Propiedad">
 
                 <label for="imagen">Imagen:</label>
-                <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png">
+                <input type="file"  id="imagen" accept="image/jpeg, image/png">
 
                 <label for="descripcion">Descripción:</label>
                 <textarea name="descripcion" id="descripcion"></textarea>
@@ -41,7 +71,7 @@
 
             <fieldset>
                 <legend>Vendedor</legend>
-                <select name="" id="">
+                <select name="vendedor" id="">
                     <option value="1">Krosswel</option>
                     <option value="2">Jose</option>
                 </select>
