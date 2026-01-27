@@ -21,14 +21,26 @@
     // Ejecuta el codigo despues que el usuario envia el formulario
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-        $titulo = $_POST['titulo'];
-        $precio = $_POST['precio'];
-        $descripcion = $_POST['descripcion'];
-        $habitaciones = $_POST['habitaciones'];
-        $wc = $_POST['wc'];
-        $estacionamiento = $_POST['estacionamiento'];
-        $vendedores_id = $_POST['vendedor'];
+        // echo "<pre>";
+        //     var_dump($_POST);
+        // echo "</pre>";
+
+        // echo "<pre>";
+        //     var_dump($_FILES);
+        // echo "</pre>";
+
+        $titulo = mysqli_real_escape_string( $db, $_POST['titulo'] );
+        $precio = mysqli_real_escape_string( $db, $_POST['precio'] );
+        $descripcion = mysqli_real_escape_string( $db, $_POST['descripcion'] );
+        $habitaciones = mysqli_real_escape_string( $db, $_POST['habitaciones'] );
+        $wc = mysqli_real_escape_string( $db, $_POST['wc'] );
+        $estacionamiento = mysqli_real_escape_string( $db, $_POST['estacionamiento'] );
+        $vendedores_id = mysqli_real_escape_string( $db, $_POST['vendedor'] );
         $creado = date('Y/m/d');
+
+        // Asignar files hacia una variable
+        $imagen = $_FILES['imagen'];
+
 
         if(!$titulo) {
             $errores[] = "Debes añadir un titulo";
@@ -56,6 +68,17 @@
 
         if(!$vendedores_id) {
             $errores[] = "Elige un vendedor";
+        }
+
+        if ( !$imagen['name'] || $imagen['error'] ) {
+            $errores[] = "La imagen es obligatoria";
+        }
+
+        // Validar por tamaño (100 Kb máximo)
+        $medida = 1000 * 100;
+
+        if ($imagen['size'] > $medida) {
+            $errores[] = "La Imagen es muy pesada";
         }
 
         // echo "<pre>";
@@ -95,7 +118,7 @@
             </div>
         <?php endforeach; ?>
 
-        <form action="/admin/propiedades/crear.php" method="POST" class="formulario">
+        <form action="/admin/propiedades/crear.php" method="POST" class="formulario" enctype="multipart/form-data">
             <fieldset>
                 <legend>Información General</legend>
 
@@ -106,7 +129,7 @@
                 <input type="number" name="precio" id="precio" placeholder="Precio Propiedad" value="<?php echo $precio; ?>">
 
                 <label for="imagen">Imagen:</label>
-                <input type="file"  id="imagen" accept="image/jpeg, image/png">
+                <input type="file" name="imagen"  id="imagen" accept="image/jpeg, image/png">
 
                 <label for="descripcion">Descripción:</label>
                 <textarea name="descripcion" id="descripcion"><?php echo $descripcion; ?></textarea>
