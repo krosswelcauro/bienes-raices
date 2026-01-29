@@ -25,9 +25,9 @@
         //     var_dump($_POST);
         // echo "</pre>";
 
-        // echo "<pre>";
-        //     var_dump($_FILES);
-        // echo "</pre>";
+        echo "<pre>";
+            var_dump($_FILES);
+        echo "</pre>";
 
         $titulo = mysqli_real_escape_string( $db, $_POST['titulo'] );
         $precio = mysqli_real_escape_string( $db, $_POST['precio'] );
@@ -74,8 +74,8 @@
             $errores[] = "La imagen es obligatoria";
         }
 
-        // Validar por tamaño (100 Kb máximo)
-        $medida = 1000 * 100;
+        // Validar por tamaño (1000 mb máximo)
+        $medida = 1000 * 1000;
 
         if ($imagen['size'] > $medida) {
             $errores[] = "La Imagen es muy pesada";
@@ -86,8 +86,22 @@
         // echo "</pre>";
 
         if(empty($errores)) {
+
+            /** SUBIDA DE ARCHIVOS */
+
+            // Crear carpeta
+            $carpeta_imagenes = "../../imagenes/";
+            if(!is_dir($carpeta_imagenes)){
+                mkdir($carpeta_imagenes);
+            }
+
+            $nombre_unico_imagen = md5( uniqid( rand(), true ) ) . ".jpg";
+
+            // Subir la imagen
+            move_uploaded_file($imagen['tmp_name'], $carpeta_imagenes . $nombre_unico_imagen );
+
             // Insertar en la base de datos
-            $query = "INSERT INTO propiedades (titulo, precio, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id) VALUES ( '$titulo', '$precio', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id' );";
+            $query = "INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id) VALUES ( '$titulo', '$precio', '$nombre_unico_imagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id' );";
 
             // echo $query;
 
@@ -95,7 +109,7 @@
 
             if ($resultado) {
                 // Redireccionando
-                header('Location: /admin');
+                header('Location: /admin?resultado=1');
             }           
         }
 
