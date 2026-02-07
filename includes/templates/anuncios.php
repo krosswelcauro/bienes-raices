@@ -1,33 +1,26 @@
 <?php 
-
-    $id = $_GET['id'];
-    $id = filter_var($id, FILTER_VALIDATE_INT);
-
-    if(!$id){
-        header('Location: /');
-    }
-
     // Importar la conexion
-    require  'includes/config/database.php';
+    require __DIR__ . '/../config/database.php';
     $db = conectarDB();
 
-    $query = "SELECT * FROM propiedades WHERE id = {$id}";
+    $query = "SELECT * FROM propiedades LIMIT {$limite}";
 
     $resultado = mysqli_query($db, $query);
-    $propiedad = mysqli_fetch_assoc($resultado);
 
-    require 'includes/funciones.php';
-    incluirTemplate('header');
 ?>
 
-    <main class="contenedor seccion contenido-centrado">
-        <h1><?php echo $propiedad['titulo']; ?></h1>
 
+<div class="contenedor-anuncios">
+    <?php while($propiedad = mysqli_fetch_assoc($resultado)) : ?>
+    <div class="anuncio">
 
-        <img loading="lazy" src="/imagenes/<?php echo $propiedad['imagen']; ?>" alt="Imagen de la propiedad">
+        <img loading="lazy" src="/imagenes/<?php echo $propiedad['imagen']; ?>" alt="anuncio">
 
-        <div class="resumen-propiedad">
+        <div class="contenido-anuncio">
+            <h3><?php echo $propiedad['titulo']; ?></h3>
+            <p><?php echo $propiedad['descripcion']; ?></p>
             <p class="precio">$ <?php echo $propiedad['precio']; ?></p>
+
             <ul class="iconos-caracteristicas">
                 <li>
                     <img class="icono" loading="lazy" src="build/img/icono_wc.svg" alt="icono wc">
@@ -43,15 +36,16 @@
                 </li>
             </ul>
 
-            <p><?php echo $propiedad['descripcion']; ?></p>
+            <a href="anuncio.php?id=<?php echo $propiedad['id']; ?>" class="boton-amarillo-block">
+                Ver Propiedad
+            </a>
+        </div> <!-- contenido-anuncio -->
+    </div> <!-- anuncio -->
+    <?php endwhile; ?>
 
-
-        </div>
-
-    </main>
+</div> <!-- contenedor-anuncios -->
 
 <?php 
+    // Cerrar la conexion
     mysqli_close($db);
-
-    incluirTemplate('footer');
 ?>
