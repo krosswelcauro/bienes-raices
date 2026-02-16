@@ -1,0 +1,17 @@
+{
+    "name": "krosswell/bienes-raices",
+    "description": "Creando el proyecto con POO",
+    "type": "project",
+    "authors": [
+        {
+            "name": "krosswel cauro",
+            "email": "correo@correo.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\" : "./clases"
+        }
+    }
+}
