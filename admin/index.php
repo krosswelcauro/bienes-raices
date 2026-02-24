@@ -1,12 +1,8 @@
 <?php 
-    require '../includes/funciones.php';
-    $auth = estaAutenticado();
+    require '../includes/app.php';
 
-    if(!$auth) {
-        header('Location: /');
-    }
-    // Importar la conexion
-    require '../includes/config/database.php';
+    estaAutenticado();
+
     $db = conectarDB();
     
     // Escribir el query

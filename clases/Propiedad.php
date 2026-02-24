@@ -27,7 +27,7 @@ class Propiedad {
         $this->id = $args['id'] ?? '';
         $this->titulo = $args['titulo'] ?? '';
         $this->precio = $args['precio'] ?? '';
-        $this->imagen = $args['imagen'] ?? 'imagen.jpg';
+        $this->imagen = $args['imagen'] ?? '';
         $this->descripcion = $args['descripcion'] ?? '';
         $this->habitaciones = $args['habitaciones'] ?? '';
         $this->wc = $args['wc'] ?? '';
@@ -51,6 +51,8 @@ class Propiedad {
         $query = "INSERT INTO propiedades($columnas) VALUES ('$filas')";
 
         $resultado = self::$db->query($query);
+        
+        return $resultado;
     }
 
     // Identificar y unir los atributos de la BD
@@ -108,18 +110,18 @@ class Propiedad {
             self::$errores[] = "Elige un vendedor";
         }
 
-        // if ( !$this->imagen['name'] || $this->imagen['error'] ) {
-        //     self::$errores[] = "La imagen es obligatoria";
-        // }
+        if ( !$this->imagen) {
+            self::$errores[] = "La imagen es obligatoria";
+        }
 
-        // // Validar por tamaño (1000 mb máximo)
-        // $medida = 1000 * 1000;
-
-        // if ($this->imagen['size'] > $medida) {
-        //     self::$errores[] = "La Imagen es muy pesada";
-        // }
 
         return self::$errores;
+    }
+
+    public function setImagen($imagen){
+        if($imagen){
+            $this->imagen = $imagen;
+        }
     }
 
 }
